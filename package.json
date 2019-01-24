@@ -1,0 +1,25 @@
+{
+  "name": "brick-breaker",
+  "version": "1.0.0",
+  "description": "This is a classic arcade game. It's simple and has been ported to almost every platform.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StephanieCherubin/Brick-Breaker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/StephanieCherubin/Brick-Breaker/issues"
+  },
+  "homepage": "https://github.com/StephanieCherubin/Brick-Breaker#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.15.0"
+  }
+}
