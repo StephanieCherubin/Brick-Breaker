@@ -18,19 +18,19 @@ let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
 
-const brickRowCount = 3;
-const brickColumnCount = 5;
+const brickRowCount = 7;
+const brickColumnCount = 8;
 const brickWidth = 75;
 const brickHeight = 20;
 const brickPadding = 10;
 const brickOffsetTop = 30;
-const brickOffsetLeft = 30;
+const brickOffsetLeft = 20;
 
 const bricks = [];
 
 let score = 0;
 
-let lives = 3;
+let lives = 12;
 
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
@@ -109,16 +109,9 @@ function drawPaddle() {
   ctx.closePath();
 }
 
-function randomColor() {
-  return '#' + Math.floor(Math.random()*0xffffff).toString(16);
-}
-
-function rgbColor() {
-  return `rgb(
-  ${Math.floor(255 - 42.5 * c)},
-  ${Math.floor(255 - 42.5 * r)},
-  0)`;
-}
+// function randomColor() {
+//   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+// }
 
 function drawBricks() {
   for (let c = 0; c < brickColumnCount; c += 1) {
@@ -131,12 +124,10 @@ function drawBricks() {
         ctx.beginPath();
         ctx.rect(brickX, brickY, brickWidth, brickHeight);
         // ctx.fillStyle = randomColor();
-        function rgbColor() {
-          return `rgb(
+        ctx.fillStyle = `rgb(
           ${Math.floor(255 - 42.5 * c)},
           ${Math.floor(255 - 42.5 * r)},
           0)`;
-        ctx.fillStyle = rgbColor();
         ctx.fill();
         ctx.closePath();
       }
