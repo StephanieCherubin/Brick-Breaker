@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-undef */
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -36,10 +38,6 @@ for (let c = 0; c < brickColumnCount; c += 1) {
     bricks[c][r] = { x: 0, y: 0, status: 1 };
   }
 }
-
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
-document.addEventListener('mousemove', mouseMoveHandler, false);
 
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
@@ -98,7 +96,7 @@ function drawLives() {
 function drawBall() {
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = '#0095DD';
+  ctx.fillStyle = '#990444';
   ctx.fill();
   ctx.closePath();
 }
@@ -106,9 +104,20 @@ function drawBall() {
 function drawPaddle() {
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = '#0095DD';
+  ctx.fillStyle = '#d11ddd';
   ctx.fill();
   ctx.closePath();
+}
+
+function randomColor() {
+  return '#' + Math.floor(Math.random()*0xffffff).toString(16);
+}
+
+function rgbColor() {
+  return `rgb(
+  ${Math.floor(255 - 42.5 * c)},
+  ${Math.floor(255 - 42.5 * r)},
+  0)`;
 }
 
 function drawBricks() {
@@ -121,7 +130,13 @@ function drawBricks() {
         bricks[c][r].y = brickY;
         ctx.beginPath();
         ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = '#0095DD';
+        // ctx.fillStyle = randomColor();
+        function rgbColor() {
+          return `rgb(
+          ${Math.floor(255 - 42.5 * c)},
+          ${Math.floor(255 - 42.5 * r)},
+          0)`;
+        ctx.fillStyle = rgbColor();
         ctx.fill();
         ctx.closePath();
       }
@@ -173,5 +188,8 @@ function draw() {
 
   requestAnimationFrame(draw);
 }
+document.addEventListener('keydown', keyDownHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('mousemove', mouseMoveHandler, false);
 
 draw();
