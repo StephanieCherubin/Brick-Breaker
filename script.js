@@ -1,6 +1,22 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-undef */
 
+
+// ball
+// paddle
+// brick
+// score
+// lives
+// game
+
+
+class Game {
+  constructor() {
+    this.ball
+  }
+}
+
+
 class Ball {
   constructor(x, y, radius = 10) {
     this.x = x;
@@ -17,7 +33,7 @@ class Ball {
 
   render(ctx) {
     ctx.beginPath();
-    ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = '#af9009';
     ctx.fill();
     ctx.closePath();
@@ -51,8 +67,6 @@ const brickPadding = 10;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 20;
 
-const bricks = [];
-
 let score = 0;
 
 let lives = 10;
@@ -61,10 +75,16 @@ let lives = 10;
 //   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
 // }
 
+const bricks = [];
+
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
   for (let r = 0; r < brickRowCount; r += 1) {
-    bricks[c][r] = { x: 0, y: 0, status: 1 };
+    bricks[c][r] = {
+      x: 0,
+      y: 0,
+      status: 1
+    };
   }
 }
 
@@ -97,7 +117,7 @@ function collisionDetection() {
       const b = bricks[c][r];
       if (b.status === 1) {
         if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-          dy = -dy;
+          ball.dy = -ball.dy;
           b.status = 0;
           score += 1;
           if (score === brickRowCount * brickColumnCount) {
@@ -165,15 +185,15 @@ function draw() {
   drawLives();
   collisionDetection();
 
-  if (ball.x + dx > canvas.width - ball.radius || ball.x + ball.dx < ballRadius) {
+  if (ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
     ball.dx = -ball.dx;
   }
 
-  if (y + dy < ballRadius) {
-    dy = -dy;
-  } else if (y + dy > canvas.height - ballRadius) {
-    if (x > paddleX && x < paddleX + paddleWidth) {
-      dy = -dy;
+  if (ball.y + ball.dy < ball.radius) {
+    ball.dy = -ball.dy;
+  } else if (ball.y + ball.dy > canvas.height - ball.radius) {
+    if (ball.x > paddleX && x < paddleX + paddleWidth) {
+      ball.dy = -ball.dy;
     } else {
       lives -= 1;
       if (!lives) {
@@ -182,8 +202,8 @@ function draw() {
       } else {
         ball.x = canvas.width / 2;
         ball.y = canvas.height - 30;
-        dx = 2;
-        dy = -2;
+        ball.dx = 2;
+        ball.dy = -2;
         paddleX = (canvas.width - paddleWidth) / 2;
       }
     }
@@ -195,8 +215,8 @@ function draw() {
     paddleX -= 7;
   }
 
-  x += dx;
-  y += dy;
+  x += ball.dx;
+  y += ball.dy;
 
   requestAnimationFrame(draw);
 }
