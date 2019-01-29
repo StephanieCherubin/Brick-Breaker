@@ -1,15 +1,40 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-undef */
+
+class Ball {
+  constructor(x, y, radius = 10) {
+    this.x = x;
+    this.y = y;
+    this.dx = 2;
+    this.dy = -2;
+    this.radius = radius;
+  }
+
+  move() {
+    this.x += this.dx;
+    this.y += this.dy;
+  }
+
+  render(ctx) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = '#af9009';
+    ctx.fill();
+    ctx.closePath();
+  }
+}
+
+
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 
-let dx = 2;
-let dy = -2;
+const ball = new Ball(canvas.width / 2, canvas.height - 30);
+ball.move();
+ball.render(ctx);
 
-const ballRadius = 10;
 
 const paddleHeight = 10;
 const paddleWidth = 75;
@@ -32,9 +57,9 @@ let score = 0;
 
 let lives = 10;
 
-function randomColor() {
-  return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
-}
+// function randomColor() {
+//   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+// }
 
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
@@ -98,11 +123,7 @@ function drawLives() {
 }
 
 function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = '#af9009';
-  ctx.fill();
-  ctx.closePath();
+  ball.render(ctx);
 }
 
 function drawPaddle() {
@@ -144,8 +165,8 @@ function draw() {
   drawLives();
   collisionDetection();
 
-  if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-    dx = -dx;
+  if (ball.x + dx > canvas.width - ball.radius || ball.x + ball.dx < ballRadius) {
+    ball.dx = -ball.dx;
   }
 
   if (y + dy < ballRadius) {
@@ -159,8 +180,8 @@ function draw() {
         alert('GAME OVER');
         document.location.reload();
       } else {
-        x = canvas.width / 2;
-        y = canvas.height - 30;
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height - 30;
         dx = 2;
         dy = -2;
         paddleX = (canvas.width - paddleWidth) / 2;
