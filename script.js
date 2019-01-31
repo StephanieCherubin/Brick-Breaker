@@ -2,8 +2,6 @@
 /* eslint-disable no-undef */
 
 
-// ball
-// paddle
 // brick
 // score
 // lives
@@ -50,7 +48,6 @@ ball.render(ctx);
 class Paddle {
   constructor(paddleX, paddleHeight = 10, paddleWidth = 75) {
     this.paddleX = paddleX;
-    this.paddleY = 310;
     this.paddleHeight = paddleHeight;
     this.paddleWidth = paddleWidth;
     this.paddleColor = '#dc1000';
@@ -59,15 +56,13 @@ class Paddle {
   render(ctx) {
     ctx.beginPath();
     ctx.rect(this.paddleX, canvas.height - this.paddleHeight, this.paddleWidth, this.paddleHeight);
-
-    console.log(this.paddleX, this.paddleY, canvas.height, this.paddleHeight, this.paddleWidth, this.paddleHeight);
-
     ctx.fillStyle = this.paddleColor;
     ctx.fill();
     ctx.closePath();
   }
 }
-const paddle = new Paddle(canvas.width - 75 / 2);
+
+const paddle = new Paddle(canvas.width / 2);
 paddle.render(ctx);
 
 let rightPressed = false;
@@ -105,7 +100,7 @@ for (let c = 0; c < brickColumnCount; c += 1) {
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
   if (relativeX > 0 && relativeX < canvas.width) {
-    paddleX = relativeX - this.paddleWidth / 2;
+    paddle.paddleX = relativeX - paddle.paddleWidth / 2;
   }
 }
 
@@ -130,7 +125,11 @@ function collisionDetection() {
     for (let r = 0; r < brickRowCount; r += 1) {
       const b = bricks[c][r];
       if (b.status === 1) {
-        if (ball.x > b.x && ball.x < b.x + brickWidth && ball.y > b.y && ball.y < b.y + brickHeight) {
+        if (ball.x > b.x
+          && ball.x < b.x + brickWidth
+          && ball.y > b.y
+          && ball.y < b.y
+          + brickHeight) {
           ball.dy = -ball.dy;
           b.status = 0;
           score += 1;
@@ -153,7 +152,7 @@ function drawScore() {
 function drawLives() {
   ctx.font = '18px Arial';
   ctx.fillStyle = 'white';
-  ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
+  ctx.fillText(`Lives: ${lives}`, canvas.width - 89, 20);
 }
 
 function drawBall() {
@@ -161,7 +160,7 @@ function drawBall() {
 }
 
 function drawPaddle() {
- paddle.render(ctx)
+  paddle.render(ctx);
 }
 
 function drawBricks() {
@@ -202,7 +201,7 @@ function draw() {
   if (ball.y + ball.dy < ball.radius) {
     ball.dy = -ball.dy;
   } else if (ball.y + ball.dy > canvas.height - ball.radius) {
-    if (ball.x > paddleX && ball.x < paddleX + paddleWidth) {
+    if (ball.x > paddle.paddleX && ball.x < paddle.paddleX + paddle.paddleWidth) {
       ball.dy = -ball.dy;
     } else {
       lives -= 1;
@@ -214,15 +213,15 @@ function draw() {
         ball.y = canvas.height - 30;
         ball.dx = 2;
         ball.dy = -2;
-        paddleX = (canvas.width - this.paddleWidth) / 2;
+        paddle.paddleX = (canvas.width - paddle.paddleWidth) / 2;
       }
     }
   }
 
-  if (rightPressed && paddleX < canvas.width - paddleWidth) {
-    paddleX += 7;
-  } else if (leftPressed && paddleX > 0) {
-    paddleX -= 7;
+  if (rightPressed && paddle.paddleX < canvas.width - paddle.paddleWidth) {
+    paddle.paddleX += 7;
+  } else if (leftPressed && paddle.paddleX > 0) {
+    paddle.paddleX -= 7;
   }
 
   ball.x += ball.dx;
