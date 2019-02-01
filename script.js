@@ -12,7 +12,11 @@
 //   constructor() {
 //     this.ball
 //   }
+
+//   start()
 // }
+
+// const game = New Game();
 
 
 class Ball {
