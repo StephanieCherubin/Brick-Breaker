@@ -72,6 +72,7 @@ paddle.render(ctx);
 let rightPressed = false;
 let leftPressed = false;
 
+
 const brickRowCount = 6;
 const brickColumnCount = 8;
 const brickWidth = 75;
@@ -79,6 +80,12 @@ const brickHeight = 20;
 const brickPadding = 10;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 20;
+
+class Score {
+  constructor() {
+    this.x = x
+  }
+}
 
 let score = 0;
 
