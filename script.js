@@ -19,6 +19,38 @@
 // The Game itself can be an object that creates and owns all of the other objects.
 // The game can hold all of the global properties, and methods.
 
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+
+function randomColor() {
+  return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+}
+
+function differentColor() {
+  return `rgb( 
+    ${Math.floor(255 - 42.5 * c)},
+    ${Math.floor(255 - 42.5 * r)},
+    0)`;
+}
+
+class Score {
+  constructor(x = 8, y = 20, color = '#ffffff', score = 0, font = '18px Arial') {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.score = score;
+    this.font = font;
+  }
+
+  render(ctx) {
+    ctx.font = this.font;
+    ctx.fillStyle = this.color;
+    ctx.fillText(`Score: ${this.score}`, this.x, this.y);
+  }
+}
+
+const score = new Score(canvas.width - 700, canvas.height - 360);
+score.render(ctx);
 
 class Ball {
   constructor(x, y, radius = 10) {
@@ -37,14 +69,11 @@ class Ball {
   render(ctx) {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#af9009';
+    ctx.fillStyle = randomColor();
     ctx.fill();
     ctx.closePath();
   }
 }
-
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
 
 const ball = new Ball(canvas.width / 2, canvas.height - 30);
 ball.move();
@@ -55,7 +84,7 @@ class Paddle {
     this.paddleX = paddleX;
     this.paddleHeight = paddleHeight;
     this.paddleWidth = paddleWidth;
-    this.paddleColor = '#dc1000';
+    this.paddleColor = randomColor();
   }
 
   render(ctx) {
@@ -73,30 +102,24 @@ paddle.render(ctx);
 let rightPressed = false;
 let leftPressed = false;
 
-let score = 0;
-
 let lives = 50;
 
-function randomColor() {
-  return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
-}
-
-// function differentColor() {
-// }
 
 class Brick {
   constructor(brickX, brickY, brickWidth = 75, brickHeight = 20, brickStatus = 1) {
     this.brickX = brickX; // { brickX: x }
     this.brickY = brickY; // { brickX: x, brickY: y }
-    this.brickColor = '#dc1000';//differentColor();
+    this.brickColor = randomColor();
     this.brickWidth = brickWidth;
     this.brickHeight = brickHeight;
     this.brickStatus = brickStatus;
   }
-  
+
   render(ctx) { // { ..., render: () => {} }
     ctx.beginPath();
-    const { brickX, brickY, brickHeight, brickWidth } = this
+    const {
+      brickX, brickY, brickHeight, brickWidth,
+    } = this;
     ctx.rect(brickX, brickY, brickWidth, brickHeight);
     ctx.fillStyle = this.brickColor;
     ctx.fill();
@@ -148,15 +171,15 @@ function keyUpHandler(e) {
 function collisionDetection() {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
-      const b = bricks[c][r];
-      if (b.status === 1) {
-        if (ball.x > b.x
-          && ball.x < b.x + brickWidth
-          && ball.y > b.y
-          && ball.y < b.y
+      const b = bricks[c][r];            
+      if (b.brickStatus === 1) {
+        if (ball.x > b.brickX
+          && ball.x < b.brickX + b.brickWidth
+          && ball.y > b.brickY
+          && ball.y < b.brickY
           + brickHeight) {
           ball.dy = -ball.dy;
-          b.status = 0;
+          b.brickStatus = 0;
           score += 1;
           if (score === brickRowCount * brickColumnCount) {
             alert('YOU WIN! CONGRATULATIONS!');
@@ -168,13 +191,11 @@ function collisionDetection() {
   }
 }
 
-function drawScore() {
-  ctx.font = '18px Arial';
-  ctx.fillStyle = 'white';
-  ctx.fillText(`Score: ${score}`, 8, 20);
+function renderScore() {
+  score.render(ctx);
 }
 
-function drawLives() {
+function renderLives() {
   ctx.font = '18px Arial';
   ctx.fillStyle = 'white';
   ctx.fillText(`Lives: ${lives}`, canvas.width - 89, 20);
@@ -216,8 +237,8 @@ function draw() {
   drawBricks();
   drawBall();
   drawPaddle();
-  drawScore();
-  drawLives();
+  renderScore();
+  renderLives();
   collisionDetection();
 
   if (ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
