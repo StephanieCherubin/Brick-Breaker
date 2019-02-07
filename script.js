@@ -8,19 +8,26 @@
 // lives
 // game
 
-
-// class Game {
-//   constructor() {
-//     this.ball
-//   }
-
-//   start()
 //  Make a Game Class.
 // The Game itself can be an object that creates and owns all of the other objects.
 // The game can hold all of the global properties, and methods.
+// In the game class, have array of array for displaying bricks
 
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
+class Game {
+  constructor(ctx = canvas.getContext('2d'), canvas = document.getElementById('myCanvas'), ball, paddle, score, lives, game) {
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.ball = ball;
+    this.paddle = paddle;
+    this.score = score;
+    this.lives = lives;
+    this.game = game;
+  }
+
+  start() {
+    
+  }
+
 
 function randomColor() {
   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
@@ -127,23 +134,49 @@ class Brick {
   }
 }
 
-const brick = new Brick(100, 140); // { brickX:0, brickY: 0, ... }
+// const brick = new Brick(100, 140);
 
-const brickRowCount = 6;
-const brickColumnCount = 8;
-const brickPadding = 10;
-const brickOffsetTop = 30;
-const brickOffsetLeft = 20;
 
-const bricks = [];
+class Bricks {
+  constructor(brickRowCount = 6, brickColumnCount = 8,
+    brickPadding = 10, brickOffsetTop = 30, brickOffsetLeft = 20) {
+    this.brickRowCount = brickRowCount;
+    this.brickColumnCount = brickColumnCount;
+    this.brickPadding = brickPadding;
+    this.brickOffsetTop = brickOffsetTop;
+    this.brickOffsetLeft = brickOffsetLeft;
+    this.bricks = [];
+    for (let c = 0; c < this.brickColumnCount; c += 1) {
+      this.bricks[c] = []; // bricks[0] = []
+      // bricks.push( [] )
+      for (let r = 0; r < this.brickRowCount; r += 1) {
+        const brickX = (c * (this.brickWidth + this.brickPadding)) + this.brickOffsetLeft;
+        const brickY = (r * (this.brickHeight + this.brickPadding)) + this.brickOffsetTop;
+        this.bricks[c].push(new Brick(brickX, brickY));
+      }
+    }
+  }
 
-for (let c = 0; c < brickColumnCount; c += 1) {
-  bricks[c] = []; // bricks[0] = []
-  // bricks.push( [] )
-  for (let r = 0; r < brickRowCount; r += 1) {
-    bricks[c].push(new Brick(0, 0));
+  render(ctx) {
+    for (let c = 0; c < this.brickColumnCount; c += 1) {
+      for (let r = 0; r < this.brickRowCount; r += 1) {
+        if (this.bricks[c][r].status === 1) {
+          ctx.beginPath();
+          ctx.rect(
+            this.bricks[c][r].brickX,
+            this.bricks[c][r].brickY,
+            this.brickWidth,
+            this.brickHeight,
+          );
+          ctx.fillStyle = this.bricks[c][r].brickColor;
+          ctx.fill();
+          ctx.closePath();
+        }
+      }
+    }
   }
 }
+
 
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
@@ -171,7 +204,7 @@ function keyUpHandler(e) {
 function collisionDetection() {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
-      const b = bricks[c][r];            
+      const b = bricks[c][r];
       if (b.brickStatus === 1) {
         if (ball.x > b.brickX
           && ball.x < b.brickX + b.brickWidth
@@ -210,25 +243,7 @@ function drawPaddle() {
 }
 
 function drawBricks() {
-  for (let c = 0; c < brickColumnCount; c += 1) {
-    for (let r = 0; r < brickRowCount; r += 1) {
-      if (bricks[c][r].status === 1) {
-        const brickX = (c * (this.brickWidth + brickPadding)) + brickOffsetLeft;
-        const brickY = (r * (this.brickHeight + brickPadding)) + brickOffsetTop;
-        bricks[c][r].x = brickX;
-        bricks[c][r].y = brickY;
-        ctx.beginPath();
-        ctx.rect(this.brickX, this.brickY, this.brickWidth, this.brickHeight);
-        ctx.fillStyle = randomColor();
-        // ctx.fillStyle = `rgb(
-        //   ${Math.floor(255 - 42.5 * c)},
-        //   ${Math.floor(255 - 42.5 * r)},
-        //   0)`;
-        ctx.fill();
-        ctx.closePath();
-      }
-    }
-  }
+  bricks.render(ctx);
 }
 
 function draw() {
