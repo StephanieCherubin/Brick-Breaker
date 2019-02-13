@@ -1,12 +1,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-undef */
 
-// Add comments
-
-// brick
-// score
-// lives
-// game
+// -------------------------------------------------
 
 //  Make a Game Class.
 // The Game itself can be an object that creates and owns all of the other objects.
@@ -14,20 +9,20 @@
 // In the game class, have array of array for displaying bricks
 
 class Game {
-  constructor(ctx = canvas.getContext('2d'), canvas = document.getElementById('myCanvas'), ball, paddle, score, lives, game) {
-    this.canvas = canvas;
-    this.ctx = ctx;
-    this.ball = ball;
-    this.paddle = paddle;
-    this.score = score;
+  constructor() {
+    this.canvas = document.getElementById('myCanvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.ball = new Ball(this.canvas.width / 2, this.canvas.height - 30);
+    this.paddle = new Paddle(this.canvas.width / 2);
+    this.score = new Score(this.canvas.width - 700, this.canvas.height - 360);
     this.lives = lives;
-    this.game = game;
   }
 
   start() {
     
   }
 
+// -------------------------------------------------
 
 function randomColor() {
   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
@@ -39,6 +34,7 @@ function differentColor() {
     ${Math.floor(255 - 42.5 * r)},
     0)`;
 }
+// -------------------------------------------------
 
 class Score {
   constructor(x = 8, y = 20, color = '#ffffff', score = 0, font = '18px Arial') {
@@ -56,9 +52,20 @@ class Score {
   }
 }
 
-const score = new Score(canvas.width - 700, canvas.height - 360);
 score.render(ctx);
+// -------------------------------------------------
+class Lives {
+  constructor() {
 
+  }
+  render(ctx) {
+    ctx.font = '18px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText(`Lives: ${lives}`, canvas.width - 89, 20);
+  }
+}
+
+// -------------------------------------------------
 class Ball {
   constructor(x, y, radius = 10) {
     this.x = x;
@@ -82,10 +89,10 @@ class Ball {
   }
 }
 
-const ball = new Ball(canvas.width / 2, canvas.height - 30);
 ball.move();
 ball.render(ctx);
 
+// -------------------------------------------------
 class Paddle {
   constructor(paddleX, paddleHeight = 10, paddleWidth = 75) {
     this.paddleX = paddleX;
@@ -103,15 +110,16 @@ class Paddle {
   }
 }
 
-const paddle = new Paddle(canvas.width / 2);
 paddle.render(ctx);
+// -------------------------------------------------
 
 let rightPressed = false;
 let leftPressed = false;
+// -------------------------------------------------
 
 let lives = 50;
 
-
+// -------------------------------------------------
 class Brick {
   constructor(brickX, brickY, brickWidth = 75, brickHeight = 20, brickStatus = 1) {
     this.brickX = brickX; // { brickX: x }
@@ -133,10 +141,7 @@ class Brick {
     ctx.closePath();
   }
 }
-
-// const brick = new Brick(100, 140);
-
-
+// -------------------------------------------------
 class Bricks {
   constructor(brickRowCount = 6, brickColumnCount = 8,
     brickPadding = 10, brickOffsetTop = 30, brickOffsetLeft = 20) {
@@ -176,7 +181,7 @@ class Bricks {
     }
   }
 }
-
+// -------------------------------------------------
 
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
@@ -200,6 +205,7 @@ function keyUpHandler(e) {
     leftPressed = false;
   }
 }
+// -------------------------------------------------
 
 function collisionDetection() {
   for (let c = 0; c < brickColumnCount; c += 1) {
@@ -223,28 +229,32 @@ function collisionDetection() {
     }
   }
 }
+// -------------------------------------------------
 
 function renderScore() {
   score.render(ctx);
 }
+// -------------------------------------------------
 
 function renderLives() {
-  ctx.font = '18px Arial';
-  ctx.fillStyle = 'white';
-  ctx.fillText(`Lives: ${lives}`, canvas.width - 89, 20);
+  lives.render(ctx);
 }
+
+// -------------------------------------------------
 
 function drawBall() {
   ball.render(ctx);
 }
-
+// -------------------------------------------------
 function drawPaddle() {
   paddle.render(ctx);
 }
+// -------------------------------------------------
 
 function drawBricks() {
   bricks.render(ctx);
 }
+// -------------------------------------------------
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -291,8 +301,13 @@ function draw() {
 
   requestAnimationFrame(draw);
 }
+// -------------------------------------------------
+
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
 draw();
+const game = new Game()
+start();
+
