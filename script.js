@@ -13,9 +13,9 @@ class Game {
     this.canvas = document.getElementById('myCanvas');
     this.ctx = canvas.getContext('2d');
     this.ball = new Ball(this.canvas.width / 2, this.canvas.height - 30);
-    this.paddle = new Paddle(this.canvas.width / 2);
+    this.paddle = new Paddle(this.canvas.width / 2, this.canvas.height - 10);
     this.score = new Score(this.canvas.width - 700, this.canvas.height - 360);
-    this.lives = lives;
+    this.lives = new Life(this.canvas.width - 75);
   }
   
   randomColor() {
@@ -32,7 +32,7 @@ class Game {
   start() {
     
   }
-
+}
 // -------------------------------------------------
 
 // -------------------------------------------------
@@ -53,16 +53,19 @@ class Score {
   }
 }
 
-score.render(ctx);
+renderScore() {
+  score.render(ctx);
+};
 // -------------------------------------------------
-class Lives {
-  constructor() {
-
+class Life {
+  constructor(position, lives = 30) {
+    this.position = position;
+    this.lives = lives;
   }
   render(ctx) {
     ctx.font = '18px Arial';
     ctx.fillStyle = 'white';
-    ctx.fillText(`Lives: ${lives}`, canvas.width - 89, 20);
+    ctx.fillText(`Lives: ${lives}`, this.position, 20);
   }
 }
 
