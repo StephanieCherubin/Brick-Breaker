@@ -5,16 +5,12 @@ function randomColor() {
   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
 }
 
-function differentColor() {
-  // return `rgb(
-  //   ${Math.floor(255 - 42.5 * c)},
-  //   ${Math.floor(255 - 42.5 * r)},
-  //   0)`;
-  return `rgb(
-    ${Math.floor(255 - 42.5 * c)},
-    ${Math.floor(255 - 42.5 * r)},
-    0)`;
-}
+// function differentColor() {
+//   return `rgb(
+//     ${Math.floor(255 - 42.5 * c)},
+//     ${Math.floor(255 - 42.5 * r)},
+//     0)`;
+// }
 
 // --------------------------Ball--------------------------
 
@@ -121,6 +117,13 @@ class Bricks {
         this.bricks[c][r] = new Brick(x, y);
       }
     }
+  }
+
+  differentColor() {
+    return `rgb(
+      ${Math.floor(255 - 42.5 * this.brickColumnCount)},
+      ${Math.floor(255 - 42.5 * this.brickRowCount)},
+      0)`;
   }
 
   render(ctx) {
