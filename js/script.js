@@ -1,16 +1,17 @@
-/* eslint-disable no-alert */
 /* eslint-disable no-undef */
 
-// -------------------------------------------------
+// randomColor() {
+//   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+// }
 
-//  Make a Game Class.
-// The Game itself can be an object that creates and owns all of the other objects.
-// The game can hold all of the global properties, and methods.
-// In the game class, have array of array for displaying bricks
+// differentColor() {
+//   return `rgb(
+//     ${Math.floor(255 - 42.5 * c)},
+//     ${Math.floor(255 - 42.5 * r)},
+//     0)`;
+// }
 
-
-// ----------------------------------------------------
-// Ball
+// --------------------------Ball--------------------------
 
 class Ball {
   constructor(x, y, radius = 10) {
@@ -39,24 +40,22 @@ class Ball {
   }
 }
 
-// -----------------------------------------------------
-// Life
+// -----------------------Life------------------------------
 
 class Life {
-  constructor(placement, lives = 30) {
+  constructor(placement, lives = 20) {
     this.placement = placement;
     this.lives = lives;
   }
 
   render(ctx) {
     ctx.font = '16px Arial';
-    ctx.fillStyle = '#0095DD';
+    ctx.fillStyle = '#fff';
     ctx.fillText(`Lives: ${this.lives}`, this.placement, 20);
   }
 }
 
-// -------------------------------------------------
-// Paddle
+// ------------------------Paddle-------------------------
 
 class Paddle {
   constructor(x, y, height = 10, width = 75) {
@@ -69,14 +68,13 @@ class Paddle {
   render(ctx) {
     ctx.beginPath();
     ctx.rect(this.x, this.y, this.width, this.height);
-    ctx.fillStyle = '#0095DD';
+    ctx.fillStyle = '#0095DD'
     ctx.fill();
     ctx.closePath();
   }
 }
 
-// ----------------------------------------------------
-// Brick
+// --------------------------Brick--------------------------
 
 class Brick {
   constructor(x, y, height = 20, width = 75, status = 1) {
@@ -90,28 +88,21 @@ class Brick {
   render(ctx) {
     ctx.beginPath();
     ctx.rect(this.x, this.y, this.width, this.height);
-    ctx.fillStyle = '#0095dd'; // randomColor();
+    ctx.fillStyle = `${Math.floor(Math.random() * 0xffffff).toString(16)}`;
     ctx.fill();
     ctx.closePath();
   }
 }
 
-// new Brick(11, 22) -> x = 11 this = {} -> {x: 11}
-// brick_1 = new Brick(11, 22)  -> { x: 11, y: 22, width: 75, height: 20, status: 1 }
-// brick_2 = new Brick(110, 22) -> { x: 110, y: 22, width: 75, height: 20, status: 1 }
-// brick_1.x -> 11
-// brick_2.x -> 110
-
-// -----------------------------------------------------
-// Bricks
+// --------------------------Bricks---------------------------
 
 class Bricks {
   constructor() {
-    this.brickRowCount = 3;
-    this.brickColumnCount = 5;
+    this.brickRowCount = 6;
+    this.brickColumnCount = 8;
     this.brickPadding = 10;
     this.brickOffsetTop = 30;
-    this.brickOffsetLeft = 30;
+    this.brickOffsetLeft = 20;
     this.bricks = [];
     this.createBricks();
   }
@@ -147,7 +138,7 @@ class Score {
 
   render(ctx) {
     ctx.font = '16px Arial';
-    ctx.fillStyle = '#0095DD';
+    ctx.fillStyle = '#fff';
     ctx.fillText(`Score: ${this.score}`, 8, 20);
   }
 }
@@ -170,7 +161,7 @@ class Game {
     this.paddle = new Paddle(this.canvas.width / 2, this.canvas.height - 10);
     this.bricks = new Bricks();
     this.lives = new Life(this.canvas.width - 75);
-    this.score = new Score(); // {score: 0}
+    this.score = new Score();
     this.rightPressed = false;
     this.leftPressed = false;
     this.handlers();
@@ -228,10 +219,10 @@ class Game {
             this.ball.dy = -this.ball.dy;
             b.status = 0;
             this.score.score += 1;
-            // if score.score === 15)
             if (this.score.score === this.bricks.brickRowCount * this.bricks.brickColumnCount) {
-              // alert('You win! Congratulations!')
-              // document.location.reload();
+              // eslint-disable-next-line no-alert
+              alert('You win! Congratulations!');
+              document.location.reload();
             }
           }
         }
@@ -263,10 +254,8 @@ class Game {
   }
 
   playGame() {
-    if (
-      this.ball.x + this.ball.dx > this.canvas.width - this.ball.radius
-      || this.ball.x + this.ball.dx < this.ball.radius
-    ) {
+    if (this.ball.x + this.ball.dx > this.canvas.width - this.ball.radius
+      || this.ball.x + this.ball.dx < this.ball.radius) {
       this.ball.dx = -this.ball.dx;
     }
     if (this.ball.y + this.ball.dy < this.ball.radius) {
@@ -290,7 +279,6 @@ class Game {
   }
 
   handlers() {
-    // document.addEventListener(eventType, handler)
     document.addEventListener('keydown', (e) => {
       this.keyDownHandler(e);
     }, false);
@@ -305,18 +293,5 @@ class Game {
   }
 }
 
-const game = new Game(); // { ball:{}, ..., score: {} }
+const game = new Game();
 game.draw();
-
-
-// Colors
-// randomColor() {
-//   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
-// }
-
-// differentColor() {
-//   return `rgb( 
-//     ${Math.floor(255 - 42.5 * c)},
-//     ${Math.floor(255 - 42.5 * r)},
-//     0)`;
-// } 
