@@ -1,15 +1,20 @@
+/* eslint-disable no-alert */
 /* eslint-disable no-undef */
 
-// randomColor() {
-//   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
-// }
+function randomColor() {
+  return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+}
 
-// differentColor() {
-//   return `rgb(
-//     ${Math.floor(255 - 42.5 * c)},
-//     ${Math.floor(255 - 42.5 * r)},
-//     0)`;
-// }
+function differentColor() {
+  // return `rgb(
+  //   ${Math.floor(255 - 42.5 * c)},
+  //   ${Math.floor(255 - 42.5 * r)},
+  //   0)`;
+  return `rgb(
+    ${Math.floor(255 - 42.5 * c)},
+    ${Math.floor(255 - 42.5 * r)},
+    0)`;
+}
 
 // --------------------------Ball--------------------------
 
@@ -34,7 +39,7 @@ class Ball {
   render(ctx) {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#0095DD';
+    ctx.fillStyle = randomColor();
     ctx.fill();
     ctx.closePath();
   }
@@ -68,7 +73,7 @@ class Paddle {
   render(ctx) {
     ctx.beginPath();
     ctx.rect(this.x, this.y, this.width, this.height);
-    ctx.fillStyle = '#0095DD'
+    ctx.fillStyle = randomColor();
     ctx.fill();
     ctx.closePath();
   }
@@ -88,7 +93,7 @@ class Brick {
   render(ctx) {
     ctx.beginPath();
     ctx.rect(this.x, this.y, this.width, this.height);
-    ctx.fillStyle = `${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+    ctx.fillStyle = randomColor();
     ctx.fill();
     ctx.closePath();
   }
@@ -129,8 +134,7 @@ class Bricks {
   }
 }
 
-// ----------------------------------------------
-// Score
+// ----------------------Score------------------------
 class Score {
   constructor(score = 0) {
     this.score = score;
@@ -143,16 +147,7 @@ class Score {
   }
 }
 
-// function randomColor() {
-//   return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
-// }
-
-/**
- *
- *
- *
- * */
-
+// --------------------Game--------------------------
 class Game {
   constructor() {
     this.canvas = document.getElementById('myCanvas');
