@@ -119,7 +119,7 @@ class Bricks {
     }
   }
 
-  differentColor() {
+  randomColor() {
     return `rgb(
       ${Math.floor(255 - 42.5 * this.brickColumnCount)},
       ${Math.floor(255 - 42.5 * this.brickRowCount)},
