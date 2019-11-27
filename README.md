@@ -1,4 +1,4 @@
 # Brick-Breaker
 This is a classic arcade game. It's simple and has been ported to almost every platform.
 
-![brick-breaker](https://user-images.githubusercontent.com/26418542/69704387-233d6e00-10a8-11ea-9501-c6bc49ccdd1c.gif)
+![Brick-Breaker](https://user-images.githubusercontent.com/26418542/69705056-95628280-10a9-11ea-802f-2146f30c8fe6.gif)
